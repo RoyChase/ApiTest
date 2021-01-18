@@ -23,8 +23,6 @@ namespace ApiTest
         {
             Configuration = configuration;
 
-            LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
-
             connection = new SqliteConnection("Data Source=InMemorySample;Mode=Memory;Cache=Shared");
         }
 
