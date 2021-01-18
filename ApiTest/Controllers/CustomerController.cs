@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using LinqToDB;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiTest.Controllers
@@ -19,13 +15,28 @@ namespace ApiTest.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IQueryable<Customer>> Get()
+        public IQueryable<Customer> Get()
         {
-            var data =_ctx.GetTable<Customer>().LoadWith(c => c.Emails);
+            var data =_ctx.GetTable<Customer>();
 
-            //var spam = data.ToList();
+            var mapped1 = data.Select(c => new CustomerModel
+            {
+                Emails = c.Emails.Select(m => m.Email),
+            });
 
-            return Ok(data);
+            try
+            {
+                var works = mapped1.Select(m => new { m.Emails }).ToList();
+
+                var fails = mapped1.Select(m => m.Emails).ToList();
+            }
+            catch (Exception)
+            {
+                
+
+            }
+
+            return data;
         }
     }
 }
